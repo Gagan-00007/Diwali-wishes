@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Happy Diwali 🪔</title>
+
+  <!-- Emoji favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🪔</text></svg>">
+
+  <!-- Google Fonts: Great Vibes (festive heading) + Poppins (clean body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════
+       OPENING SCREEN — starry sky, animated diya, tap button
+       ════════════════════════════════════════════════════════ -->
+  <div id="opening-screen">
+    <div id="opening-stars"></div>
+
+    <div class="diya-wrap">
+      <div class="opening-diya">
+        <div class="flame-outer"><div class="flame-inner"></div></div>
+        <div class="wick"></div>
+        <div class="oil"></div>
+        <div class="bowl"></div>
+        <div class="bowl-base"></div>
+      </div>
+      <div class="diya-glow-ring"></div>
+    </div>
+
+    <button id="open-btn">Tap to open 🪔</button>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       MAIN SCREEN — canvas fireworks, photo, wishes, controls
+       ════════════════════════════════════════════════════════ -->
+  <div id="main-screen" class="hidden">
+    <canvas id="fw-canvas"></canvas>
+
+    <!-- Content overlay (pointer-events: none so clicks go to canvas) -->
+    <div id="content-layer">
+      <div id="photo-wrap" class="hidden">
+        <div id="rangoli-ring"></div>
+        <img id="photo" src="assets/her-photo.png" alt="" draggable="false">
+      </div>
+      <div id="wish-text"></div>
+    </div>
+
+    <!-- Floating controls -->
+    <div id="controls" class="hidden">
+      <button id="replay-btn">Light it again 🎆</button>
+      <button id="mute-btn" aria-label="Toggle sound">🔊</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
