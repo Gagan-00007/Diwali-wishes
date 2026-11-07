@@ -257,23 +257,36 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 16px;
-  padding: 16px 16px 85px;    /* generous bottom room for controls */
+  padding: 30px 16px 100px;   /* room at top and generous bottom room for controls */
   overflow-y: auto;
   overflow-x: hidden;
-  pointer-events: none;       /* clicks pass straight to the firework canvas */
+  -webkit-overflow-scrolling: touch;
+  pointer-events: auto;        /* enables mouse-wheel and touch scrolling */
+  touch-action: pan-y;         /* allows vertical scrolling */
   z-index: 10;                /* stays above canvas so text is never covered */
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 215, 0, 0.4) transparent;
 }
 
 #content-layer::-webkit-scrollbar {
-  display: none;
+  width: 5px;
+}
+
+#content-layer::-webkit-scrollbar-thumb {
+  background: rgba(255, 215, 0, 0.35);
+  border-radius: 4px;
+}
+
+#content-layer::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* ── Responsive Sticker Photo Container ──────────────────────── */
 #photo-wrap {
   position: relative;
+  margin-top: auto;            /* vertically centers content when short, scrolls naturally when long */
   /* Scales cleanly on mobile down to 360px without overflow */
   width: min(65vw, 240px);
   height: min(65vw, 240px);
@@ -369,6 +382,7 @@ html, body {
   text-align: center;
   max-width: 480px;
   width: 100%;
+  margin-bottom: auto;        /* pairs with #photo-wrap margin-top: auto for vertical centering */
   display: flex;
   flex-direction: column;
   gap: 8px;

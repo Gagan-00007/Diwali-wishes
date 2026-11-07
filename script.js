@@ -10,27 +10,25 @@
 // ────────────────────────────────────────────────────────────────
 const CONFIG = {
   /* ── Names ─────────────────────────────────────────────── */
-  herName : 'Mam',
-  myName  : 'Varsha',
+  herName: '[HER NAME]',
+  myName: '[MY NAME]',
 
   /* ── Photo path (transparent-background cutout PNG) ────── */
-  photoPath : 'assets/her-photo.png',
+  photoPath: 'assets/her-photo.png',
 
   /* ── Wish lines (fade in line-by-line under the photo)
        {name} is replaced by herName, {from} by myName         */
-  wishLines : [
-    'Happy Diwali, {name}! 🪔',
-    'May your life shine brighter than a thousand diyas.',
-    'Thank you for being such an important and guiding presence in my life.',
-    'Wishing you peace, boundless joy, and success this festive season.',
-    'With respect and best wishes, {from} ✨',
+  wishLines: [
+    'Happy Diwali, Mam! 🪔',
+
+    'With all my love, Mam ❤️',
   ],
 
   /* ── Firework burst colours ──────────────────────────────
        Dominated by crimson red, magenta, and royal purple.
        Gold is kept as an accent (~15-20%), with a touch of pink
        and sparkle white for variety.                               */
-  fireworkColors : [
+  fireworkColors: [
     '#e60039',   // Crimson Red
     '#ff0055',   // Vivid Crimson
     '#dc143c',   // Deep Crimson
@@ -47,19 +45,19 @@ const CONFIG = {
   ],
 
   /* ── Timing (ms) ───────────────────────────────────────── */
-  showDuration   : 7000,      // grand opening show length (~7 seconds)
-  lineDelay      : 1400,      // delay between each wishing line
-  photoAppearAt  : 1800,      // when sticker photo pops in
+  showDuration: 7000,      // grand opening show length (~7 seconds)
+  lineDelay: 1400,      // delay between each wishing line
+  photoAppearAt: 1800,      // when sticker photo pops in
 
   /* ── Particle Performance Caps ─────────────────────────── */
-  maxParticles        : 5000, // full, big bursts
-  maxParticlesLowEnd  : 1400, // safety cap for lower-end phones
-  burstRange          : [120, 200], // particles per standard burst
-  burstRangeLowEnd    : [60, 95],
+  maxParticles: 5000, // full, big bursts
+  maxParticlesLowEnd: 1400, // safety cap for lower-end phones
+  burstRange: [120, 200], // particles per standard burst
+  burstRangeLowEnd: [60, 95],
 
   /* ── Audio Settings ────────────────────────────────────── */
-  musicVolume : 0.35,
-  sfxVolume   : 0.55,
+  musicVolume: 0.35,
+  sfxVolume: 0.55,
 };
 
 // ────────────────────────────────────────────────────────────────
@@ -78,34 +76,35 @@ document.title = `Happy Diwali, ${CONFIG.herName} 🪔`;
 //  RUNTIME STATE
 // ────────────────────────────────────────────────────────────────
 const STATE = {
-  showRunning   : false,
-  interactive   : false,
-  muted         : false,
-  dragging      : false,
-  dragX         : 0,
-  dragY         : 0,
-  reducedMotion : window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  lowEnd        : (navigator.hardwareConcurrency || 4) <= 2,
-  ptrStartX     : 0,
-  ptrStartY     : 0,
-  ptrMoved      : false,
+  showRunning: false,
+  interactive: false,
+  muted: false,
+  dragging: false,
+  dragX: 0,
+  dragY: 0,
+  reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  lowEnd: (navigator.hardwareConcurrency || 4) <= 2,
+  ptrStartX: 0,
+  ptrStartY: 0,
+  ptrMoved: false,
 };
 
 // ────────────────────────────────────────────────────────────────
 //  DOM References
 // ────────────────────────────────────────────────────────────────
 const $ = (sel) => document.querySelector(sel);
-const $opening   = $('#opening-screen');
-const $main      = $('#main-screen');
-const $canvas    = $('#fw-canvas');
-const $openBtn   = $('#open-btn');
+const $opening = $('#opening-screen');
+const $main = $('#main-screen');
+const $canvas = $('#fw-canvas');
+const $contentLayer = $('#content-layer');
+const $openBtn = $('#open-btn');
 const $photoWrap = $('#photo-wrap');
-const $photo     = $('#photo');
-const $wishText  = $('#wish-text');
-const $controls  = $('#controls');
+const $photo = $('#photo');
+const $wishText = $('#wish-text');
+const $controls = $('#controls');
 const $replayBtn = $('#replay-btn');
-const $muteBtn   = $('#mute-btn');
-const $rangoli   = $('#rangoli-ring');
+const $muteBtn = $('#mute-btn');
+const $rangoli = $('#rangoli-ring');
 
 const ctx = $canvas.getContext('2d');
 
@@ -118,9 +117,9 @@ function resizeCanvas() {
   DPR = Math.min(window.devicePixelRatio || 1, 2); // cap at 2 for performance
   W = window.innerWidth;
   H = window.innerHeight;
-  $canvas.width  = W * DPR;
+  $canvas.width = W * DPR;
   $canvas.height = H * DPR;
-  $canvas.style.width  = W + 'px';
+  $canvas.style.width = W + 'px';
   $canvas.style.height = H + 'px';
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 }
@@ -136,8 +135,8 @@ resizeCanvas();
 //  SOUND MANAGER — Graceful fallback if files are missing
 // ────────────────────────────────────────────────────────────────
 const Sound = {
-  _pools : {},
-  _music : null,
+  _pools: {},
+  _music: null,
 
   _createPool(name, src, size) {
     if (typeof Audio === 'undefined') return;
@@ -146,27 +145,27 @@ const Sound = {
       try {
         const a = new Audio();
         a.preload = 'auto';
-        a.volume  = CONFIG.sfxVolume;
-        a.src     = src;
-        a.addEventListener('error', () => {}); // silence 404 console noise
+        a.volume = CONFIG.sfxVolume;
+        a.src = src;
+        a.addEventListener('error', () => { }); // silence 404 console noise
         pool.push(a);
-      } catch (_) {}
+      } catch (_) { }
     }
     this._pools[name] = pool;
   },
 
   init() {
-    this._createPool('boom',    'assets/sounds/boom.mp3',    6);
+    this._createPool('boom', 'assets/sounds/boom.mp3', 6);
     this._createPool('crackle', 'assets/sounds/crackle.mp3', 6);
     this._createPool('whistle', 'assets/sounds/whistle.mp3', 4);
 
     try {
       this._music = new Audio();
-      this._music.src     = 'assets/sounds/music.mp3';
-      this._music.loop    = true;
-      this._music.volume  = CONFIG.musicVolume;
+      this._music.src = 'assets/sounds/music.mp3';
+      this._music.loop = true;
+      this._music.volume = CONFIG.musicVolume;
       this._music.preload = 'auto';
-      this._music.addEventListener('error', () => {});
+      this._music.addEventListener('error', () => { });
     } catch (_) {
       this._music = null;
     }
@@ -178,21 +177,21 @@ const Sound = {
     if (!pool || pool.length === 0) return;
     for (const a of pool) {
       if (a.paused || a.ended) {
-        try { a.currentTime = 0; a.play().catch(() => {}); } catch (_) {}
+        try { a.currentTime = 0; a.play().catch(() => { }); } catch (_) { }
         return;
       }
     }
-    try { pool[0].currentTime = 0; pool[0].play().catch(() => {}); } catch (_) {}
+    try { pool[0].currentTime = 0; pool[0].play().catch(() => { }); } catch (_) { }
   },
 
   startMusic() {
     if (STATE.muted || !this._music) return;
-    try { this._music.play().catch(() => {}); } catch (_) {}
+    try { this._music.play().catch(() => { }); } catch (_) { }
   },
 
   stopMusic() {
     if (!this._music) return;
-    try { this._music.pause(); this._music.currentTime = 0; } catch (_) {}
+    try { this._music.pause(); this._music.currentTime = 0; } catch (_) { }
   },
 
   toggleMute() {
@@ -205,11 +204,11 @@ const Sound = {
 // ────────────────────────────────────────────────────────────────
 //  PARTICLE ARRAYS
 // ────────────────────────────────────────────────────────────────
-const stars     = []; // background twinkling stars
-const rockets   = []; // rising rockets
+const stars = []; // background twinkling stars
+const rockets = []; // rising rockets
 const particles = []; // burst particles
-const sparkles  = []; // sparkler (phuljhadi) particles
-const floaters  = []; // floating diyas & lanterns
+const sparkles = []; // sparkler (phuljhadi) particles
+const floaters = []; // floating diyas & lanterns
 
 // ────────────────────────────────────────────────────────────────
 //  STARS (Background night sky)
@@ -219,11 +218,11 @@ function initStars(count) {
   stars.length = 0;
   for (let i = 0; i < count; i++) {
     stars.push({
-      x      : Math.random() * W,
-      y      : Math.random() * H,
-      r      : 0.4 + Math.random() * 1.5,
-      speed  : 0.005 + Math.random() * 0.02,
-      offset : Math.random() * Math.PI * 2,
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: 0.4 + Math.random() * 1.5,
+      speed: 0.005 + Math.random() * 0.02,
+      offset: Math.random() * Math.PI * 2,
     });
   }
 }
@@ -245,8 +244,8 @@ function drawStars(t) {
 // ────────────────────────────────────────────────────────────────
 function launchRocket(targetX, targetY, forcedColor) {
   const startX = targetX + (Math.random() - 0.5) * 60;
-  const speed  = 6.5 + Math.random() * 3.0;
-  const angle  = Math.atan2(targetY - H, targetX - startX);
+  const speed = 6.5 + Math.random() * 3.0;
+  const angle = Math.atan2(targetY - H, targetX - startX);
 
   const color = forcedColor || CONFIG.fireworkColors[Math.floor(Math.random() * CONFIG.fireworkColors.length)];
   const style = ['round', 'round', 'ring', 'willow'][Math.floor(Math.random() * 4)];
@@ -305,8 +304,8 @@ function updateRockets() {
 // ────────────────────────────────────────────────────────────────
 //  BURSTS (Fuller, bigger, crimson/magenta/purple dominant)
 // ────────────────────────────────────────────────────────────────
-function getMaxP()  { return STATE.lowEnd ? CONFIG.maxParticlesLowEnd : CONFIG.maxParticles; }
-function getRange() { return STATE.lowEnd ? CONFIG.burstRangeLowEnd   : CONFIG.burstRange; }
+function getMaxP() { return STATE.lowEnd ? CONFIG.maxParticlesLowEnd : CONFIG.maxParticles; }
+function getRange() { return STATE.lowEnd ? CONFIG.burstRangeLowEnd : CONFIG.burstRange; }
 
 function createBurst(x, y, style, color) {
   const [lo, hi] = getRange();
@@ -318,21 +317,21 @@ function createBurst(x, y, style, color) {
   if (count <= 0) return;
 
   switch (style) {
-    case 'round':  burstRound(x, y, count, color);  break;
-    case 'ring':   burstRing(x, y, count, color);   break;
+    case 'round': burstRound(x, y, count, color); break;
+    case 'ring': burstRing(x, y, count, color); break;
     case 'willow': burstWillow(x, y, count, color); break;
-    default:       burstRound(x, y, count, color);
+    default: burstRound(x, y, count, color);
   }
 }
 
 function addParticle(x, y, vx, vy, color, decay, gravity, size) {
   particles.push({
     x, y, vx, vy, color,
-    alpha    : 1,
-    decay    : decay + Math.random() * 0.003,
-    size     : (size || 1.6) + Math.random() * 1.6,
-    gravity  : gravity,
-    friction : 0.98,
+    alpha: 1,
+    decay: decay + Math.random() * 0.003,
+    size: (size || 1.6) + Math.random() * 1.6,
+    gravity: gravity,
+    friction: 0.98,
   });
 }
 
@@ -341,7 +340,7 @@ function burstRound(x, y, n, c) {
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2;
     const s = 1.8 + Math.random() * 5.8;
-    addParticle(x, y, Math.cos(a)*s, Math.sin(a)*s, c, 0.009, 0.026);
+    addParticle(x, y, Math.cos(a) * s, Math.sin(a) * s, c, 0.009, 0.026);
   }
 }
 
@@ -350,7 +349,7 @@ function burstRing(x, y, n, c) {
   for (let i = 0; i < n; i++) {
     const a = (i / n) * Math.PI * 2;
     const s = 4.6 + Math.random() * 1.0;
-    addParticle(x, y, Math.cos(a)*s, Math.sin(a)*s, c, 0.010, 0.022);
+    addParticle(x, y, Math.cos(a) * s, Math.sin(a) * s, c, 0.010, 0.022);
   }
 }
 
@@ -359,7 +358,7 @@ function burstWillow(x, y, n, c) {
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2;
     const s = 1.0 + Math.random() * 3.8;
-    addParticle(x, y, Math.cos(a)*s, Math.sin(a)*s - 0.4, c, 0.005, 0.048, 1.8);
+    addParticle(x, y, Math.cos(a) * s, Math.sin(a) * s - 0.4, c, 0.005, 0.048, 1.8);
   }
 }
 
@@ -376,8 +375,8 @@ function updateParticles() {
     p.vx *= p.friction;
     p.vy *= p.friction;
     p.vy += p.gravity;
-    p.x  += p.vx;
-    p.y  += p.vy;
+    p.x += p.vx;
+    p.y += p.vy;
     p.alpha -= p.decay;
 
     if (p.alpha <= 0) {
@@ -388,7 +387,7 @@ function updateParticles() {
     // Outer faint glow halo
     if (doGlow) {
       ctx.globalAlpha = p.alpha * 0.28;
-      ctx.fillStyle   = p.color;
+      ctx.fillStyle = p.color;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.size * 3.2, 0, Math.PI * 2);
       ctx.fill();
@@ -396,7 +395,7 @@ function updateParticles() {
 
     // Core spark
     ctx.globalAlpha = p.alpha;
-    ctx.fillStyle   = p.color;
+    ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
     ctx.fill();
@@ -413,15 +412,15 @@ let floaterTimer = null;
 function spawnFloater() {
   if (floaters.length > (STATE.lowEnd ? 6 : 14)) return;
   floaters.push({
-    x       : Math.random() * W,
-    y       : H + 25,
-    vy      : -(0.28 + Math.random() * 0.45),
-    vx      : (Math.random() - 0.5) * 0.25,
-    sz      : 8 + Math.random() * 8,
-    a       : 0.55 + Math.random() * 0.4,
-    kind    : Math.random() > 0.45 ? 'diya' : 'lantern',
-    wobble  : Math.random() * Math.PI * 2,
-    wobbleS : 0.008 + Math.random() * 0.015,
+    x: Math.random() * W,
+    y: H + 25,
+    vy: -(0.28 + Math.random() * 0.45),
+    vx: (Math.random() - 0.5) * 0.25,
+    sz: 8 + Math.random() * 8,
+    a: 0.55 + Math.random() * 0.4,
+    kind: Math.random() > 0.45 ? 'diya' : 'lantern',
+    wobble: Math.random() * Math.PI * 2,
+    wobbleS: 0.008 + Math.random() * 0.015,
   });
 }
 
@@ -448,7 +447,7 @@ function updateFloaters(t) {
       continue;
     }
     if (f.kind === 'diya') drawCanvasDiya(f.x, f.y, f.sz, f.a);
-    else                   drawCanvasLantern(f.x, f.y, f.sz, f.a);
+    else drawCanvasLantern(f.x, f.y, f.sz, f.a);
   }
 }
 
@@ -456,25 +455,25 @@ function drawCanvasDiya(x, y, sz, a) {
   ctx.save();
   // Warm aura
   ctx.globalAlpha = a * 0.26;
-  const g = ctx.createRadialGradient(x, y - sz*0.3, 0, x, y - sz*0.3, sz * 1.1);
+  const g = ctx.createRadialGradient(x, y - sz * 0.3, 0, x, y - sz * 0.3, sz * 1.1);
   g.addColorStop(0, 'rgba(255,190,40,0.75)');
   g.addColorStop(1, 'transparent');
   ctx.fillStyle = g;
   ctx.beginPath();
-  ctx.arc(x, y - sz*0.3, sz * 1.1, 0, Math.PI * 2);
+  ctx.arc(x, y - sz * 0.3, sz * 1.1, 0, Math.PI * 2);
   ctx.fill();
 
   // Golden flame
   ctx.globalAlpha = a;
   ctx.fillStyle = '#ffd700';
   ctx.beginPath();
-  ctx.ellipse(x, y - sz*0.5, sz*0.16, sz*0.36, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y - sz * 0.5, sz * 0.16, sz * 0.36, 0, 0, Math.PI * 2);
   ctx.fill();
 
   // Clay bowl
   ctx.fillStyle = '#cd853f';
   ctx.beginPath();
-  ctx.ellipse(x, y + sz*0.05, sz*0.38, sz*0.16, 0, 0, Math.PI);
+  ctx.ellipse(x, y + sz * 0.05, sz * 0.38, sz * 0.16, 0, 0, Math.PI);
   ctx.fill();
   ctx.restore();
 }
@@ -495,14 +494,14 @@ function drawCanvasLantern(x, y, sz, a) {
   ctx.globalAlpha = a * 0.7;
   ctx.fillStyle = '#ff3366';
   ctx.beginPath();
-  ctx.ellipse(x, y, sz*0.42, sz*0.58, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y, sz * 0.42, sz * 0.58, 0, 0, Math.PI * 2);
   ctx.fill();
 
   // Inner flame light
   ctx.globalAlpha = a * 0.55;
   ctx.fillStyle = '#ffcc00';
   ctx.beginPath();
-  ctx.ellipse(x, y, sz*0.22, sz*0.34, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y, sz * 0.22, sz * 0.34, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 }
@@ -516,14 +515,14 @@ function emitSparkler() {
   for (let i = 0; i < count; i++) {
     const colors = ['#ffd700', '#ff0055', '#ff1493', '#ffffff', '#e0115f'];
     sparkles.push({
-      x     : STATE.dragX + (Math.random() - 0.5) * 6,
-      y     : STATE.dragY + (Math.random() - 0.5) * 6,
-      vx    : (Math.random() - 0.5) * 4.0,
-      vy    : (Math.random() - 0.5) * 4.0 - 1.2,
-      sz    : 0.9 + Math.random() * 1.8,
-      alpha : 1,
-      decay : 0.028 + Math.random() * 0.02,
-      color : colors[Math.floor(Math.random() * colors.length)],
+      x: STATE.dragX + (Math.random() - 0.5) * 6,
+      y: STATE.dragY + (Math.random() - 0.5) * 6,
+      vx: (Math.random() - 0.5) * 4.0,
+      vy: (Math.random() - 0.5) * 4.0 - 1.2,
+      sz: 0.9 + Math.random() * 1.8,
+      alpha: 1,
+      decay: 0.028 + Math.random() * 0.02,
+      color: colors[Math.floor(Math.random() * colors.length)],
       gravity: 0.045,
     });
   }
@@ -536,8 +535,8 @@ function updateSparkler() {
   ctx.globalCompositeOperation = 'lighter';
   for (let i = sparkles.length - 1; i >= 0; i--) {
     const s = sparkles[i];
-    s.x  += s.vx;
-    s.y  += s.vy;
+    s.x += s.vx;
+    s.y += s.vy;
     s.vy += s.gravity;
     s.alpha -= s.decay;
 
@@ -547,7 +546,7 @@ function updateSparkler() {
     }
 
     ctx.globalAlpha = s.alpha;
-    ctx.fillStyle   = s.color;
+    ctx.fillStyle = s.color;
     ctx.beginPath();
     ctx.arc(s.x, s.y, s.sz, 0, Math.PI * 2);
     ctx.fill();
@@ -626,14 +625,14 @@ function startShow() {
   // Wide spread coverage across the entire sky (8% to 92% of screen width)
   // 16 rockets total with dual/triple bursts for a grand festive climax
   const schedule = STATE.reducedMotion ? [
-    { t: 200,  x: 0.30, y: 0.18 },
+    { t: 200, x: 0.30, y: 0.18 },
     { t: 1800, x: 0.70, y: 0.22 },
     { t: 3600, x: 0.45, y: 0.15 },
     { t: 5400, x: 0.60, y: 0.20 },
   ] : [
-    { t: 100,  x: 0.20, y: 0.22 }, // Left opening
-    { t: 450,  x: 0.80, y: 0.18 }, // Right opening
-    { t: 900,  x: 0.50, y: 0.12 }, // High center
+    { t: 100, x: 0.20, y: 0.22 }, // Left opening
+    { t: 450, x: 0.80, y: 0.18 }, // Right opening
+    { t: 900, x: 0.50, y: 0.12 }, // High center
     { t: 1400, x: 0.12, y: 0.28 }, // Far left
     { t: 1750, x: 0.88, y: 0.25 }, // Far right
     { t: 2200, x: 0.35, y: 0.16 }, // Center left
@@ -700,9 +699,9 @@ function replayShow() {
 
   // Clear canvas particle arrays
   particles.length = 0;
-  rockets.length   = 0;
-  sparkles.length  = 0;
-  floaters.length  = 0;
+  rockets.length = 0;
+  sparkles.length = 0;
+  floaters.length = 0;
   stopFloaters();
 
   // Reset DOM elements
@@ -728,10 +727,10 @@ function generateOpeningStars() {
     const s = document.createElement('div');
     s.className = 'star';
     const sz = 1 + Math.random() * 2.4;
-    s.style.width  = sz + 'px';
+    s.style.width = sz + 'px';
     s.style.height = sz + 'px';
-    s.style.left   = Math.random() * 100 + '%';
-    s.style.top    = Math.random() * 100 + '%';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
     s.style.setProperty('--dur', (2 + Math.random() * 3).toFixed(1) + 's');
     s.style.animationDelay = (Math.random() * 4).toFixed(1) + 's';
     container.appendChild(s);
@@ -761,42 +760,48 @@ function getCanvasCoords(e) {
   return { x: e.clientX - r.left, y: e.clientY - r.top };
 }
 
-$canvas.addEventListener('pointerdown', (e) => {
-  if (!STATE.interactive) return;
-  const { x, y } = getCanvasCoords(e);
-  STATE.ptrStartX = x;
-  STATE.ptrStartY = y;
-  STATE.ptrMoved  = false;
-  STATE.dragging  = true;
-  STATE.dragX     = x;
-  STATE.dragY     = y;
-  try { $canvas.setPointerCapture(e.pointerId); } catch (_) {}
-});
+[$canvas, $contentLayer].forEach((el) => {
+  if (!el) return;
 
-$canvas.addEventListener('pointermove', (e) => {
-  if (!STATE.dragging) return;
-  const { x, y } = getCanvasCoords(e);
-  STATE.dragX = x;
-  STATE.dragY = y;
-  const dx = x - STATE.ptrStartX;
-  const dy = y - STATE.ptrStartY;
-  if (dx*dx + dy*dy > 100) {
-    STATE.ptrMoved = true;
-  }
-});
+  el.addEventListener('pointerdown', (e) => {
+    if (!STATE.interactive) return;
+    // Don't intercept button clicks
+    if (e.target && e.target.closest('#controls')) return;
 
-$canvas.addEventListener('pointerup', (e) => {
-  if (!STATE.interactive) return;
-  STATE.dragging = false;
-  if (!STATE.ptrMoved) {
-    // Tap → launch a burst at that exact point
     const { x, y } = getCanvasCoords(e);
-    launchRocket(x, y);
-  }
-});
+    STATE.ptrStartX = x;
+    STATE.ptrStartY = y;
+    STATE.ptrMoved = false;
+    STATE.dragging = true;
+    STATE.dragX = x;
+    STATE.dragY = y;
+  });
 
-$canvas.addEventListener('pointercancel', () => {
-  STATE.dragging = false;
+  el.addEventListener('pointermove', (e) => {
+    if (!STATE.dragging) return;
+    const { x, y } = getCanvasCoords(e);
+    STATE.dragX = x;
+    STATE.dragY = y;
+    const dx = x - STATE.ptrStartX;
+    const dy = y - STATE.ptrStartY;
+    if (dx * dx + dy * dy > 120) {
+      STATE.ptrMoved = true;
+    }
+  });
+
+  el.addEventListener('pointerup', (e) => {
+    if (!STATE.interactive) return;
+    STATE.dragging = false;
+    if (!STATE.ptrMoved) {
+      // Clean tap without scroll drag → launch a firework at that exact point
+      const { x, y } = getCanvasCoords(e);
+      launchRocket(x, y);
+    }
+  });
+
+  el.addEventListener('pointercancel', () => {
+    STATE.dragging = false;
+  });
 });
 
 /* ── Light it again replay button ────────────────────────────── */
