@@ -143,7 +143,7 @@ Your website will be live in seconds at a URL like `https://diwali-wishes.vercel
 ## 🎆 Features
 
 - **Autoplay Safe:** Music and audio effects start only on user interaction (`Tap to open 🪔`), fully respecting browser audio policies.
-- **Canvas Firework Engine:** 4 distinct burst styles (spherical round, expanding ring, romantic heart, and weeping willow).
+- **Canvas Firework Engine:** Classic burst styles (spherical round peony, expanding ring, and weeping willow).
 - **Interactive Sky:**
   - Tap or click anywhere in the sky to launch a rocket at that point.
   - Drag or swipe across the screen for an interactive sparkler (*phuljhadi*) trail.

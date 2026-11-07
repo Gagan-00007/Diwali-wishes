@@ -251,7 +251,7 @@ function launchRocket(targetX, targetY, forcedColor) {
   const angle  = Math.atan2(targetY - H, targetX - startX);
 
   const color = forcedColor || CONFIG.fireworkColors[Math.floor(Math.random() * CONFIG.fireworkColors.length)];
-  const style = ['round', 'ring', 'heart', 'willow'][Math.floor(Math.random() * 4)];
+  const style = ['round', 'round', 'ring', 'willow'][Math.floor(Math.random() * 4)];
 
   rockets.push({
     x: startX,
@@ -322,7 +322,6 @@ function createBurst(x, y, style, color) {
   switch (style) {
     case 'round':  burstRound(x, y, count, color);  break;
     case 'ring':   burstRing(x, y, count, color);   break;
-    case 'heart':  burstHeart(x, y, count, color);  break;
     case 'willow': burstWillow(x, y, count, color); break;
     default:       burstRound(x, y, count, color);
   }
@@ -357,18 +356,7 @@ function burstRing(x, y, n, c) {
   }
 }
 
-/* 3. Romantic Heart burst */
-function burstHeart(x, y, n, c) {
-  const sc = (3.8 + Math.random() * 0.7) / 16;
-  for (let i = 0; i < n; i++) {
-    const t  = (i / n) * Math.PI * 2;
-    const hx = 16 * Math.pow(Math.sin(t), 3);
-    const hy = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
-    addParticle(x, y, hx*sc, hy*sc, c, 0.009, 0.018);
-  }
-}
-
-/* 4. Weeping Willow cascade — sparks linger and drift down gracefully */
+/* 3. Weeping Willow cascade — sparks linger and drift down gracefully */
 function burstWillow(x, y, n, c) {
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2;
