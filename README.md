@@ -1,150 +1,154 @@
 # 🪔 Happy Diwali Wishes
 
-A single-page animated Diwali wishes website with canvas fireworks, interactive effects, and a personal message — built with plain HTML, CSS, and vanilla JavaScript (no frameworks, no build step).
+A single-page, animated Diwali wishes website with full-screen canvas fireworks, ambient drifting diyas, interactive sparklers, and personal greetings — built with pure vanilla HTML, CSS, and JavaScript (no frameworks, no build step).
+
+---
+
+## 📁 Repository Structure
+
+Everything sits directly at the **project root** so Vercel, GitHub Pages, or any static host can deploy it immediately with zero configuration:
+
+```
+├── index.html              # Main website entry point
+├── style.css               # Styling, deep violet/indigo gradients & responsive rules
+├── script.js               # Canvas particle engine, show sequence & CONFIG
+├── README.md               # Project documentation & deployment guide
+└── assets/
+    ├── her-photo.png       # Transparent-background cutout photo (sticker style)
+    └── sounds/             # Optional audio files (boom, crackle, whistle, music)
+        └── .gitkeep
+```
 
 ---
 
 ## ✏️ How to Customise
 
-### 1. Replace the Photo
+### 1. Change Her Name, Your Name & Wishes
 
-Drop a **transparent-background PNG** (sticker/cutout style works best) into:
+Open **`script.js`** and edit the `CONFIG` object at the very top:
 
-```
-assets/her-photo.png
-```
-
-If you skip this step the page will show a placeholder with the person's initial — nothing breaks.
-
-### 2. Add Sound Files *(optional)*
-
-Place these MP3s in `assets/sounds/`:
-
-| File            | What it's used for               |
-|-----------------|----------------------------------|
-| `music.mp3`     | Background music (loops)         |
-| `boom.mp3`      | Firework explosion               |
-| `crackle.mp3`   | Crackle after the boom           |
-| `whistle.mp3`   | Rocket rising whistle            |
-
-All sounds are optional. The page works silently if any or all are missing.
-
-### 3. Edit the Message
-
-Open **`script.js`** and find the `CONFIG` object at the very top:
-
-```js
+```javascript
 const CONFIG = {
-  herName : 'Someone Special',   // ← her name
-  myName  : 'Your Name',         // ← your name
+  herName : 'Priya',             // Her name (or [HER NAME])
+  myName  : 'Gagan',             // Your name (or [MY NAME])
+
+  photoPath : 'assets/her-photo.png',
 
   wishLines : [
     'Happy Diwali, {name}! 🪔',
     'May your life shine brighter than a thousand diyas.',
-    // ▼ Write your personal lines here ▼
-    'Your warmth and your smile light up every room,',
-    'just like diyas light up the darkest nights.',
-    // ▲ End of personal lines ▲
+    // ▼ Write your personal message below ▼
+    'Your smile brings more warmth and joy into my world',
+    'than all the festival lights combined.',
+    // ▲ End of personal message ▲
     'With all my love, {from} ❤️',
   ],
   ...
 };
 ```
 
-- `{name}` is replaced with `herName`, `{from}` with `myName`.
-- Add, remove, or rewrite lines freely.
+- `{name}` automatically fills in `herName`.
+- `{from}` automatically fills in `myName`.
 
-### 4. Name from URL *(optional)*
+### 2. URL Name Override *(optional)*
 
-Append `?name=Riya` to the URL to override the default name:
+You can also send a link with a custom name via WhatsApp or message:
 
 ```
 https://your-site.vercel.app/?name=Riya
 ```
 
-### 5. Tweak Colours
+The site will read `?name=` and display the wish specifically for her.
 
-All colours live in CSS variables at the top of **`style.css`**:
+### 3. Replace the Photo
 
-```css
-:root {
-  --sky-top:    #12002b;
-  --sky-bottom: #2a0845;
-  --gold:       #ffd700;
-  /* … */
-}
+Place her photo (a transparent-background PNG cutout works best) at:
+
+```
+assets/her-photo.png
 ```
 
-Firework burst colours are in the `CONFIG.fireworkColors` array in `script.js`.
+- On mobile phones, it scales responsively (max 55vw wide).
+- On desktop screens, it displays at ~280px.
+- It features a crisp white sticker outline, soft shadow, and an orbiting ring of golden diyas.
+- If no photo is found or the image fails to load, it automatically falls back to an initial avatar with her first letter.
+
+### 4. Firework Colors
+
+The burst colors are configured in `script.js` under `CONFIG.fireworkColors`:
+
+```javascript
+fireworkColors : [
+  '#e60039',   // Crimson Red
+  '#ff0055',   // Vivid Crimson
+  '#dc143c',   // Deep Crimson
+  '#ff1493',   // Deep Pink / Magenta
+  '#e0115f',   // Ruby Magenta
+  '#d80073',   // Vivid Magenta
+  '#9b30ff',   // Royal Purple
+  '#8a2be2',   // Royal Blue-Violet
+  '#7b1fa2',   // Deep Purple
+  '#ffd700',   // Warm Gold (~15-20% accent)
+  '#ffb700',   // Amber Gold
+  '#ff69b4',   // Soft Pink
+  '#ffffff',   // Sparkle White
+],
+```
+
+The palette is dominated by **crimson red, magenta, and royal purple**, with **warm gold** as a glowing accent (~20%) and touches of pink and sparkle white against the deep midnight violet sky.
+
+### 5. Sound Files *(optional)*
+
+To enable festive sounds, place these MP3 files in `assets/sounds/`:
+
+| File | Purpose |
+|------|---------|
+| `music.mp3` | Ambient background music (loops softly) |
+| `boom.mp3` | Firework explosion sound |
+| `crackle.mp3` | Crackle sound following the burst |
+| `whistle.mp3` | Rising rocket whistle |
+
+> **Note:** Audio files are completely optional. The website works silently and gracefully if any or all sound files are omitted.
 
 ---
 
-## 🚀 Deploy on GitHub + Vercel
+## 🚀 Deploying to GitHub and Vercel
 
 ### Step 1 — Push to GitHub
 
+From the project root:
+
 ```bash
-cd wish                        # project root
-git init
 git add .
-git commit -m "🪔 Diwali wishes"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/diwali-wish.git
+git commit -m "Update Diwali wishes site"
 git push -u origin main
 ```
 
-### Step 2 — Import into Vercel
+### Step 2 — Deploy on Vercel
 
-1. Go to [vercel.com/new](https://vercel.com/new) and sign in with GitHub.
-2. Click **Import** next to your `diwali-wish` repo.
-3. Configure the project:
-   - **Framework Preset:** `Other`
-   - **Build Command:** *(leave empty)*
-   - **Output Directory:** `.` (the root)
-4. Click **Deploy**.
+1. Log in to [vercel.com](https://vercel.com) with your GitHub account.
+2. Click **Add New…** → **Project**.
+3. Select your repository (`Diwali-wishes`).
+4. In the Project Configuration:
+   - **Framework Preset:** `Other` (or auto-detected as static)
+   - **Root Directory:** `./`
+   - **Build Command:** *(leave blank)*
+   - **Output Directory:** *(leave blank)*
+5. Click **Deploy**.
 
-Your site will be live at `https://diwali-wish.vercel.app` (or your custom domain) within seconds.
-
-> **Tip:** Every `git push` to `main` will auto-deploy the latest version.
-
----
-
-## 📂 File Structure
-
-```
-wish/
-├── index.html          Main page
-├── style.css           All styles + CSS variables
-├── script.js           All JS logic + CONFIG
-├── README.md           This file
-└── assets/
-    ├── her-photo.png   Sticker photo (transparent PNG)
-    └── sounds/
-        ├── boom.mp3
-        ├── crackle.mp3
-        ├── whistle.mp3
-        └── music.mp3
-```
+Your website will be live in seconds at a URL like `https://diwali-wishes.vercel.app`!
 
 ---
 
 ## 🎆 Features
 
-- Canvas-based particle firework system with four burst styles (round, ring, heart, willow)
-- Tap/click anywhere in the sky to launch a firework
-- Drag/swipe for a sparkler (phuljhadi) trail
-- Floating diyas and lanterns after the show
-- Sticker-style photo with CSS drop-shadow outline
-- Rotating rangoli ring
-- Line-by-line animated wish text
-- Background music + SFX with mute toggle
-- Mobile-first (`100dvh`, touch events, no overflow)
-- `devicePixelRatio`-aware canvas
-- `prefers-reduced-motion` support
-- Performance caps for low-end devices
-- Graceful audio fallback (works with or without sound files)
-
----
-
-Built with ❤️ and 🪔
-
+- **Autoplay Safe:** Music and audio effects start only on user interaction (`Tap to open 🪔`), fully respecting browser audio policies.
+- **Canvas Firework Engine:** 4 distinct burst styles (spherical round, expanding ring, romantic heart, and weeping willow).
+- **Interactive Sky:**
+  - Tap or click anywhere in the sky to launch a rocket at that point.
+  - Drag or swipe across the screen for an interactive sparkler (*phuljhadi*) trail.
+  - Floating illuminated diyas and lanterns drift upward in the night sky.
+  - Corner mute/unmute button (48px easy-touch target).
+  - "Light it again 🎆" button to replay the grand show anytime.
+- **Mobile First:** Built using `100dvh`, `touch-action: none`, and `env(safe-area-inset-bottom)` with zero page scrolling or overflow.
+- **Accessibility:** Detects `prefers-reduced-motion` and throttles particles for low-power devices.
