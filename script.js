@@ -10,8 +10,8 @@
 // ────────────────────────────────────────────────────────────────
 const CONFIG = {
   /* ── Names ─────────────────────────────────────────────── */
-  herName: '[HER NAME]',
-  myName: '[MY NAME]',
+  herName: 'Mam',
+  myName: 'Student',
 
   /* ── Photo path (transparent-background cutout PNG) ────── */
   photoPath: 'assets/her-photo.png',
@@ -33,7 +33,8 @@ const CONFIG = {
     'I am sorry. I should not have done that.',
     'I cannot get you crackers to burst, so here you can burst as many as you like. 🎆',
     'May your life be as free and bright as these crackers, and may you see happiness in everything.',
-    'Forgot me mam don\'t me forgot all as u told it won\'t last long it will go like that 😁',
+    'You forgot about me, mam, just like you told me to. It won\'t last long; it will pass just like that.😁',
+    'I know u can do it be strong mam❤️',
     'Sorry Mam, this is the last message from me.',
     'Goodbye...',
     'With respect and best wishes, {from} ✨',
