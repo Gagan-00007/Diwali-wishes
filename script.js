@@ -19,9 +19,24 @@ const CONFIG = {
   /* ── Wish lines (fade in line-by-line under the photo)
        {name} is replaced by herName, {from} by myName         */
   wishLines: [
-    'Happy Diwali, Mam! 🪔',
-
-    'With all my love, Mam ❤️',
+    'Happy Diwali, {name}! 🪔',
+    'May your life shine brighter than a thousand diyas.',
+    'Your smile brings so much warmth and joy into my world.',
+    'I tell you everything, and I think of you as a very close person in my life.',
+    'I believe in you so much. After all I have been through and suffered,',
+    'I never thought I would be like this with anyone.',
+    'I hope you will tell me whatever you have, and not hide anything from me.',
+    'Sometimes I think you are with me so you can fix varsha this stupied brain of mine.',
+    'Even if you scold me, ignore me or slap me,',
+    'I will think of it as my Mam doing it for my good.',
+    'Today I saw your entire location, where you went and where you have been.',
+    'I am sorry. I should not have done that.',
+    'I cannot get you crackers to burst, so here you can burst as many as you like. 🎆',
+    'May your life be as free and bright as these crackers, and may you see happiness in everything.',
+    'Forgot me mam don\'t me forgot all as u told it won\'t last long it will go like that 😁',
+    'Sorry Mam, this is the last message from me.',
+    'Goodbye...',
+    'With respect and best wishes, {from} ✨',
   ],
 
   /* ── Firework burst colours ──────────────────────────────
