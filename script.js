@@ -10,8 +10,8 @@
 // ────────────────────────────────────────────────────────────────
 const CONFIG = {
   /* ── Names ─────────────────────────────────────────────── */
-  herName : '[HER NAME]',
-  myName  : '[MY NAME]',
+  herName : 'Mam',
+  myName  : 'Varsha',
 
   /* ── Photo path (transparent-background cutout PNG) ────── */
   photoPath : 'assets/her-photo.png',
@@ -21,11 +21,9 @@ const CONFIG = {
   wishLines : [
     'Happy Diwali, {name}! 🪔',
     'May your life shine brighter than a thousand diyas.',
-    /* ▼ [WRITE YOUR OWN 2-3 PERSONAL LINES HERE] ▼ */
-    'Your smile brings more warmth and joy into my world',
-    'than all the festival lights combined.',
-    /* ▲ End of personal lines ▲ */
-    'With all my love, {from} ❤️',
+    'Thank you for being such an important and guiding presence in my life.',
+    'Wishing you peace, boundless joy, and success this festive season.',
+    'With respect and best wishes, {from} ✨',
   ],
 
   /* ── Firework burst colours ──────────────────────────────
